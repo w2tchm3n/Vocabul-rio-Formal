@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vocabulário Formal</title>
+  <style>
+    
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
+    .card { background: #f0f0f0; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 8px #aaa; }
+    button { margin-top: 20px; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #ddd; }
+  </style>
+</head>
+<body style="background-color: black">
+  <h1 style="color: white;">Vocabulário Formal</h1>
+  <div class="card">
+    <h2 id="palavra">Clique no botão</h2>
+    <p id="significado">para aprender uma nova palavra</p>
+    <button onclick="novaPalavra()">Nova Palavra</button>
+  </div>
+
+  <script>
+  let palavras = [];
+
+  fetch("palavras.json")
+    .then(r => r.json())
+    .then(data => { palavras = data; });
+
+  function novaPalavra() {
+    if (!palavras.length) {
+      document.getElementById("palavra").textContent = "Carregando…";
+      document.getElementById("significado").textContent = "Aguarde o JSON carregar.";
+      return;
+    }
+    const item = palavras[Math.floor(Math.random() * palavras.length)];
+    document.getElementById("palavra").textContent = item.termo;
+    document.getElementById("significado").textContent = item.significado;
+  }
+</script>
+
+<div style="position: relative; height: 300px;">
+  <img src="img.gif" alt="Exemplo" style="position: absolute; top: 50px; left: 100px;">
+</div>
+
+<p style="color: white; font-family: 'Courier New', Courier, monospace; margin-top: 100px;">Aprenda palavras formais para aumentar seu vocabulário</p>
+<p style="color: white; font-family: 'Courier New', Courier, monospace;"> Aumentar o vocabulário é importante por várias razões, e não se trata apenas de “decorar palavras difíceis”. Aqui estão os principais motivos:
+
+Comunicação mais clara e precisa – Quanto mais palavras você conhece, melhor consegue expressar exatamente o que pensa ou sente. Isso evita mal-entendidos e torna sua fala ou escrita mais eficiente.
+
+Leitura e compreensão aprimoradas – Um vocabulário amplo permite entender textos mais complexos sem precisar consultar constantemente o dicionário, o que torna o estudo e a leitura mais fluidos.
+
+Pensamento crítico e raciocínio – Palavras são ferramentas do pensamento. Quanto mais palavras você conhece, mais nuances consegue perceber e analisar em ideias, argumentos e situações.
+
+Expressão pessoal mais rica – Um bom vocabulário ajuda a transmitir emoções, opiniões e criatividade de forma mais impactante.
+
+Desempenho acadêmico e profissional – Em provas, trabalhos, apresentações e entrevistas, um vocabulário sólido passa credibilidade e preparo.
+
+Confiança e persuasão – Pessoas com vocabulário variado tendem a se sentir mais seguras ao falar ou escrever, e conseguem convencer e influenciar melhor.</p>
+
+</body>
+</html>
