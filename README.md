@@ -1,3 +1,5 @@
+Aumentar o vocabulário é importante por várias razões, e não se trata apenas de “decorar palavras difíceis”. Aqui estão os principais motivos:
+
 Comunicação mais clara e precisa – Quanto mais palavras você conhece, melhor consegue expressar exatamente o que pensa ou sente. Isso evita mal-entendidos e torna sua fala ou escrita mais eficiente.
 
 Leitura e compreensão aprimoradas – Um vocabulário amplo permite entender textos mais complexos sem precisar consultar constantemente o dicionário, o que torna o estudo e a leitura mais fluidos.
