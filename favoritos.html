@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Favoritos</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    ul { list-style: none; padding: 0; }
+    li { background: #f0f0f0; margin: 5px; padding: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>Meus Favoritos</h1>
+  <ul id="lista-favoritos"></ul>
+  <p><a href="index.html">Voltar</a></p>
+
+  <script>
+    const favoritos = JSON.parse(localStorage.getItem('favoritos')) || [];
+    const lista = document.getElementById('lista-favoritos');
+
+    if (favoritos.length === 0) {
+      lista.innerHTML = "<li>Nenhum favorito ainda</li>";
+    } else {
+      favoritos.forEach(fav => {
+        const li = document.createElement('li');
+        li.textContent = fav.title;
+        lista.appendChild(li);
+      });
+    }
+  </script>
+</body>
+</html>
