@@ -5,46 +5,118 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vocabulário Formal</title>
   <style>
-    
-    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; }
-    .card { background: #f0f0f0; padding: 20px; border-radius: 10px; box-shadow: 2px 2px 8px #aaa; }
-    button { margin-top: 20px; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+    body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background-color: black; }
+    .card {
+      background: #f0f0f0;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 8px #aaa;
+      position: relative;
+      display: inline-block;
+      min-width: 250px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
     button:hover { background: #ddd; }
+
+    /* Estilo da estrela */
+    .star {
+      cursor: pointer;
+      font-size: 28px;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: gray;
+      user-select: none;
+    }
+    .star.active {
+      color: gold;
+    }
   </style>
 </head>
-<body style="background-color: black">
+<body>
   <h1 style="color: white;">Vocabulário Formal</h1>
-  <div class="card">
+
+  <div class="card" data-id="unico">
+    <span class="star">&#9734;</span>
     <h2 id="palavra">Clique no botão</h2>
     <p id="significado">para aprender uma nova palavra</p>
     <button style="box-shadow: 0px 4px 8px rgba(0,0,0,0.3);" onclick="novaPalavra()">Nova Palavra</button>
   </div>
 
   <script>
-  let palavras = [];
+    let palavras = [];
+    let favoritos = JSON.parse(localStorage.getItem("favoritos")) || [];
 
-  fetch("palavras.json")
-    .then(r => r.json())
-    .then(data => { palavras = data; });
+    const palavraEl = document.getElementById("palavra");
+    const significadoEl = document.getElementById("significado");
+    const star = document.querySelector(".star");
 
-  function novaPalavra() {
-    if (!palavras.length) {
-      document.getElementById("palavra").textContent = "Carregando…";
-      document.getElementById("significado").textContent = "Aguarde o JSON carregar.";
-      return;
+    // Carregar JSON
+    fetch("palavras.json")
+      .then(r => r.json())
+      .then(data => { palavras = data; });
+
+    function novaPalavra() {
+      if (!palavras.length) {
+        palavraEl.textContent = "Carregando…";
+        significadoEl.textContent = "Aguarde o JSON carregar.";
+        return;
+      }
+      const item = palavras[Math.floor(Math.random() * palavras.length)];
+      palavraEl.textContent = item.termo;
+      significadoEl.textContent = item.significado;
+
+      // Verificar se já está nos favoritos
+      atualizarEstrela(item.termo);
     }
-    const item = palavras[Math.floor(Math.random() * palavras.length)];
-    document.getElementById("palavra").textContent = item.termo;
-    document.getElementById("significado").textContent = item.significado;
-  }
-</script>
 
-<div style="display: flex; justify-content: center; align-items: flex-start; height: 200px; margin-top: 100px;">
-  <img src="img.gif" alt="Boa Sorte">
-</div>
+    function atualizarEstrela(termo) {
+      if (favoritos.some(f => f.termo === termo)) {
+        star.classList.add("active");
+      } else {
+        star.classList.remove("active");
+      }
+    }
 
-<p style="color: white; font-family: 'Courier New', Courier, monospace; margin-top: 100px;">Aprenda palavras formais para aumentar seu vocabulário</p>
-<p style="color: white; font-family: 'Courier New', Courier, monospace;"> Aumentar o vocabulário é importante por várias razões, e não se trata apenas de “decorar palavras difíceis”. Aqui estão os principais motivos:
+    // Clique na estrela
+    star.addEventListener("click", () => {
+      const termo = palavraEl.textContent;
+      const significado = significadoEl.textContent;
+
+      if (termo === "Clique no botão" || termo === "Carregando…") return;
+
+      const index = favoritos.findIndex(f => f.termo === termo);
+
+      if (index === -1) {
+        favoritos.push({ termo, significado });
+        star.classList.add("active");
+      } else {
+        favoritos.splice(index, 1);
+        star.classList.remove("active");
+      }
+
+      localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    });
+
+    // Inicializa com estrela correta (se já tiver favorito salvo e abrir a página de novo)
+    atualizarEstrela(palavraEl.textContent);
+  </script>
+
+  <div style="display: flex; justify-content: center; align-items: flex-start; height: 200px; margin-top: 100px;">
+    <img src="img.gif" alt="Boa Sorte">
+  </div>
+
+  <p style="color: white; font-family: 'Courier New', Courier, monospace; margin-top: 100px;">
+    Aprenda palavras formais para aumentar seu vocabulário
+  </p>
+  <p style="color: white; font-family: 'Courier New', Courier, monospace;">
+    Aumentar o vocabulário é importante por várias razões, e não se trata apenas de “decorar palavras difíceis", Aqui estão os principais motivos:
 
 Comunicação mais clara e precisa – Quanto mais palavras você conhece, melhor consegue expressar exatamente o que pensa ou sente. Isso evita mal-entendidos e torna sua fala ou escrita mais eficiente.
 
@@ -57,6 +129,6 @@ Expressão pessoal mais rica – Um bom vocabulário ajuda a transmitir emoçõe
 Desempenho acadêmico e profissional – Em provas, trabalhos, apresentações e entrevistas, um vocabulário sólido passa credibilidade e preparo.
 
 Confiança e persuasão – Pessoas com vocabulário variado tendem a se sentir mais seguras ao falar ou escrever, e conseguem convencer e influenciar melhor.</p>
-
+  </p>
 </body>
 </html>
